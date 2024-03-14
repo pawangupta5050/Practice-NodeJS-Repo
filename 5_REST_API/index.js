@@ -27,14 +27,15 @@ app
         res.send(user);
     })
     .patch((req, res) => {
-        const id = Number(req.params.id);
-        const user = users.find(user => user.id === id);
-        res.send(`Hello, ${user.first_name} your request is pending`);
+        
     })
     .delete((req, res) => {
         const id = Number(req.params.id);
-        const user = users.find(user => user.id === id);
-        res.send(`Hello, ${user.first_name} your request is pending`);
+        const newUsers = users.filter(user => user.id !== id);
+        fs.writeFile('./MOCK_DATA.json', JSON.stringify(newUsers), (err, data) => {
+            return res.send({success: true, message: 'The user was deleted successfully with id ' + id});
+        })
+        
     })
 
 app.post('/api/users/', (req, res) => {
