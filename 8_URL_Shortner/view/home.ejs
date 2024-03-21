@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .form {
+            display: flex;
+            flex-direction: column;
+            width: 800px;
+            /* margin: auto; */
+            font-size: 20px;
+        }
+
+        .form input[type="text"] {
+            width: 500px;
+            height: 30px;
+            margin: 10px 0;
+            padding: 5px;
+        }
+
+        .form input[type="submit"] {
+            width: 200px;
+            height: 50px;
+            /* margin: 10px 0; */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            max-width: 300px;
+            /* Set a maximum width for the cells */
+            overflow: hidden;
+            white-space: nowrap;
+            /* Prevent wrapping of text */
+            text-overflow: ellipsis;
+            /* Show ellipsis for overflowed content */
+        }
+
+        thead {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>URL Shortner</h1>
+    <% if(locals.id) { %>
+        <p>Generated URL: <a href="http://localhost:8000/api/url/<%= id %>"
+                target="_blank">http://localhost:8000/api/url/<%= id %></a></p>
+        <% } %>
+            <form method="POST" action="/api/url" class="form">
+                <label for="url">Enter the URL</label>
+                <input type="text" name="url" placeholder="Enter the URL">
+                <input type="submit" name="Generate" value="Generate" />
+            </form>
+
+            <h1>Analytics</h1>
+
+            <% if(locals.urls) { %>
+                <table>
+                    <thead>
+                        <th>Sr. No</th>
+                        <th>ShortID</th>
+                        <th>Redirect</th>
+                        <th>Clicks</th>
+                    </thead>
+                    <tbody>
+                        <% urls.forEach((url, index)=> { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= url.shortId %>
+                                </td>
+                                <td>
+                                    <%= url.redirectingUrl %>
+                                </td>
+                                <td>
+                                    <%= url.visitHistory.length %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+
+</body>
+
+</html>
