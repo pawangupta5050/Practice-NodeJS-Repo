@@ -1,8 +1,11 @@
 const express = require('express');
-const { handleReturnId, handleSignup, handleLogin } = require('../controller/staticRouter.js')
+const { restrictTo } = require('../middleware/auth.js')
+const { handleReturnId, handleSignup, handleLogin, handleReturnAllUrl } = require('../controller/staticRouter.js')
 const router = express.Router();
 
-router.get('/', handleReturnId)
+router.get('/admin', restrictTo(['ADMIN']), handleReturnAllUrl)
+
+router.get('/', restrictTo(['NORMAL', 'ADMIN']), handleReturnId)
 
 router.get('/signup', handleSignup)
 

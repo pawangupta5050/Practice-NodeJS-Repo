@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
 const User = require('../model/user.js');
 const { setUser } = require('../service/auth.js')
 
@@ -8,15 +8,14 @@ const handleGetAllUsers = async (req, res) => {
 }
 
 const handleGetUser = async (req, res) => {
-    // console.log(req);
     const {email, password} = req.body
-    // console.log(email, body)
+    console.log(email, password)
     const user = await User.findOne({email, password});
-    // console.log(user)
     if(!user) return res.render('login', { error : 'Invalid email or password'})
-    const sessionId = uuidv4();
-    setUser(sessionId, user);
-    res.cookie('uid', sessionId)
+
+    const token = setUser(user);
+    console.log('user controller -',token)
+    res.cookie("token", token)
     return res.redirect('/')
 }
 

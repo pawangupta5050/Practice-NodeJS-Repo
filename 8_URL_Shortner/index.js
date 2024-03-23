@@ -5,7 +5,7 @@ const { db } = require('./connection.js')
 const urlRouter = require('./routes/url.js')
 const userRouter = require('./routes/user.js')
 const staticRoute = require('./routes/staticRouter.js')
-const { restrictLoggedInUserOnly, checkAuth } = require('./middleware/auth.js')
+const {  checkForAuthentication,  restrictTo } = require('./middleware/auth.js')
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -16,11 +16,12 @@ db().then(() => console.log('Connections established')).catch(err => console.err
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(checkForAuthentication)
 
-app.use('/', checkAuth, staticRoute)
+app.use('/', staticRoute)
 
-app.use('/api/url', restrictLoggedInUserOnly, urlRouter)
+app.use('/api/url', restrictTo(["NORMAL", "ADMIN"]), urlRouter)
 
-app.use('/api/user' , userRouter)
+app.use('/api/user', userRouter)
 
 app.listen(8000, () => console.log('listening on 8000'));

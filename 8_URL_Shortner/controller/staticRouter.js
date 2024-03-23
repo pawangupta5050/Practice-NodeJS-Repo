@@ -1,8 +1,13 @@
-const {URL} = require('../model/url')
+const { URL } = require('../model/url')
 const User = require('../model/user')
 
+const handleReturnAllUrl = async (req, res) => {
+    const urls = await URL.find({})
+    return res.render('home', { urls: urls })
+}
+
 const handleReturnId = async (req, res) => {
-    if(!req.user) return res.redirect('/login') 
+    // if(!req.user) return res.redirect('/login') 
     const urls = await URL.find({ createdBy: req.user._id })
     return res.render('home', { urls: urls })
 }
@@ -18,5 +23,6 @@ const handleLogin = async (req, res) => {
 module.exports = {
     handleReturnId,
     handleSignup,
-    handleLogin
+    handleLogin,
+    handleReturnAllUrl
 }
