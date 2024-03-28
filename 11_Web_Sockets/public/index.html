@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- <h1>Hello</h1>
+    <input type="text" name="message" id="message">
+    <button id="sendMessage">submit</button> -->
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">Chatbot</div>
+                    <div class="card-body" id="chat-messages">
+                        <div class="media mb-3" >
+                            <div class="media-body" id="realMessage">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="message" name="message"
+                                placeholder="Type your message here..." aria-label="Type your message here..."
+                                aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit" id="sendMessage">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const sendMessage = document.getElementById("sendMessage")
+        const inputMessage = document.getElementById("message")
+        const realMessage = document.getElementById('realMessage')
+        // const otherProvidedMessage = document.getElementById('otherProvidedMessage')
+
+        socket.on('message', message => {
+            console.log(message)
+            const p = document.createElement('p')
+            p.innerHTML = `<p class="user-message mb-0 text-left" id="">${message}</p>`;
+            realMessage.append(p)
+        })
+
+        sendMessage.addEventListener('click', event => {
+            const message = inputMessage.value;
+            const p = document.createElement('p')
+            p.innerHTML = `<p class="bot-message mb-0 text-right" id="">${message}</p>`;
+            realMessage.append(p)
+            socket.emit('userMessage', message)
+            inputMessage.value = '';
+        })
+
+    </script>
+</body>
+
+</html>
