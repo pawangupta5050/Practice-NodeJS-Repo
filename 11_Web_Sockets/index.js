@@ -10,7 +10,9 @@ const io = new Server(server)
 io.on('connection', socket => {
     socket.on('userMessage', message => {
         console.log(message)
-        io.emit('message', message);
+        // io.emit('message', message);
+        let response = 'Hi';
+        socket.send(response)
     })
 })
 
